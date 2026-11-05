@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#7c3aed">
+  <meta name="description" content="SafeHer - Women Safety & Emergency Assistance Web Application. Real-time SOS, Live Location Sharing, Fake Call, Safe Journey, Audio Evidence Recording, and Trusted Contacts.">
+  <title>SafeHer – Your Safety, Our Priority</title>
+
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Leaflet CSS for OpenStreetMap Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app" class="app-layout">
+
+    <!-- Top Emergency Bar (Quick Access Helplines) -->
+    <header class="top-banner">
+      <div class="banner-content">
+        <div class="emergency-badge">
+          <span class="pulsing-dot"></span>
+          <span>Emergency Hotlines:</span>
+        </div>
+        <div class="hotline-pills">
+          <a href="tel:112" class="hotline-pill pulse-hover" title="National Emergency Helpline (112)">
+            <i class="fa-solid fa-phone-volume"></i> 112 National
+          </a>
+          <a href="tel:1091" class="hotline-pill highlight pulse-hover" title="Women Helpline (1091)">
+            <i class="fa-solid fa-shield-cat"></i> 1091 Women
+          </a>
+          <a href="tel:100" class="hotline-pill" title="Police (100)">
+            <i class="fa-solid fa-building-shield"></i> 100 Police
+          </a>
+          <a href="tel:108" class="hotline-pill" title="Ambulance (108)">
+            <i class="fa-solid fa-truck-medical"></i> 108 Ambulance
+          </a>
+        </div>
+      </div>
+      <div class="top-actions">
+        <!-- Quick Disguise Button -->
+        <button id="stealth-mode-btn" class="icon-action-btn" title="Quick Disguise / Discreet Mode">
+          <i class="fa-solid fa-calculator"></i>
+          <span class="btn-text">Discreet Mode</span>
+        </button>
+        <!-- Siren Alarm Quick Trigger -->
+        <button id="quick-siren-btn" class="icon-action-btn danger-btn" title="Toggle Loud Siren Alarm">
+          <i class="fa-solid fa-bell"></i>
+          <span class="btn-text">Siren Alarm</span>
+        </button>
+        <!-- Auth / Profile Pill -->
+        <button id="auth-status-pill" class="auth-pill" title="User Profile">
+          <div class="avatar-circle" id="user-avatar-initial">D</div>
+          <span id="user-display-name">Diya C.</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Navigation Sidebar (Desktop & Tablet) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div class="logo-text">
+            <h2>Safe<span>Her</span></h2>
+            <p>Women Safety & Assistance</p>
+          </div>
+        </div>
+        <button id="sidebar-close-btn" class="mobile-close-btn" aria-label="Close menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Protection</div>
+        <a href="#dashboard" class="nav-link active" data-page="dashboard">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#sos" class="nav-link nav-highlight" data-page="sos">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Emergency SOS</span>
+        </a>
+        <a href="#contacts" class="nav-link" data-page="contacts">
+          <i class="fa-solid fa-users"></i>
+          <span>Trusted Contacts</span>
+          <span class="badge" id="contacts-count-badge">3</span>
+        </a>
+        <a href="#location" class="nav-link" data-page="location">
+          <i class="fa-solid fa-location-crosshairs"></i>
+          <span>Live Location</span>
+        </a>
+
+        <div class="nav-section-title">Safety Utilities</div>
+        <a href="#fakecall" class="nav-link" data-page="fakecall">
+          <i class="fa-solid fa-phone-slash"></i>
+          <span>Fake Call Simulator</span>
+        </a>
+        <a href="#journey" class="nav-link" data-page="journey">
+          <i class="fa-solid fa-route"></i>
+          <span>Safe Journey</span>
+        </a>
+        <a href="#recorder" class="nav-link" data-page="recorder">
+          <i class="fa-solid fa-microphone-lines"></i>
+          <span>Audio Recorder</span>
+        </a>
+        <a href="#nearby" class="nav-link" data-page="nearby">
+          <i class="fa-solid fa-hospital"></i>
+          <span>Nearby Services</span>
+        </a>
+
+        <div class="nav-section-title">Smart Features</div>
+        <a href="#shake" class="nav-link" data-page="shake">
+          <i class="fa-solid fa-hand-fist"></i>
+          <span>Shake to Alert</span>
+        </a>
+        <a href="#countdown" class="nav-link" data-page="countdown">
+          <i class="fa-solid fa-stopwatch-20"></i>
+          <span>Emergency Timer</span>
+        </a>
+        <a href="#tips" class="nav-link" data-page="tips">
+          <i class="fa-solid fa-book-open-reader"></i>
+          <span>Safety Tips</span>
+        </a>
+        <a href="#profile" class="nav-link" data-page="profile">
+          <i class="fa-solid fa-circle-user"></i>
+          <span>Profile & Settings</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="user-card-compact" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-user-avatar">DC</div>
+          <div class="user-info">
+            <span class="user-name" id="sidebar-user-name">Diya C.</span>
+            <span class="user-status text-success"><i class="fa-solid fa-circle-check"></i> Protected</span>
+          </div>
+          <button id="logout-btn" class="icon-btn-ghost" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="main-content">
+
+      <!-- ==========================================
+           PAGE 1: DASHBOARD
+           ========================================== -->
+      <section id="page-dashboard" class="page-view active">
+        <!-- Welcome Hero Banner -->
+        <div class="hero-welcome-card">
+          <div class="hero-text">
+            <div class="safety-status-pill">
+              <span class="live-pulse"></span>
+              <span>GPS Sentinel Active</span>
+            </div>
+            <h1 id="hero-greeting">Welcome, <span class="highlight-text" id="dashboard-name">Diya</span></h1>
+            <p>Your instant safety shield is ready. In any emergency, press the red SOS button below or trigger a quick tool.</p>
+          </div>
+          <div class="hero-status-widget">
+            <div class="quick-status-item">
+              <span class="label">Guard Status</span>
+              <span class="value text-success"><i class="fa-solid fa-shield-heart"></i> Ready</span>
+            </div>
+            <div class="quick-status-item">
+              <span class="label">Contacts Ready</span>
+              <span class="value" id="dash-contacts-ready">3 People</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Central SOS Core Button Card -->
+        <div class="sos-central-card">
+          <div class="sos-wrapper">
+            <div class="pulse-ring ring-1"></div>
+            <div class="pulse-ring ring-2"></div>
+            <div class="pulse-ring ring-3"></div>
+            <button id="main-sos-button" class="sos-btn" aria-label="Trigger Emergency SOS">
+              <span class="sos-text">SOS</span>
+              <span class="sos-subtext">TAP FOR EMERGENCY</span>
+            </button>
+          </div>
+          <p class="sos-caption">
+            <i class="fa-solid fa-location-dot"></i> Fetches instant GPS &bull; Prepares WhatsApp/SMS message to trusted contacts
+          </p>
+        </div>
+
+        <!-- Quick Access Safety Tools Grid -->
+        <div class="section-heading">
+          <h2><i class="fa-solid fa-wand-magic-sparkles text-purple"></i> Quick Safety Tools</h2>
+          <span class="sub">One-tap tools designed for fast reaction</span>
+        </div>
+
+        <div class="tools-grid">
+          <div class="tool-card card-pink" onclick="App.navigateTo('fakecall')">
+            <div class="tool-icon">
+              <i class="fa-solid fa-phone-volume"></i>
+            </div>
+            <div class="tool-details">
+              <h3>Fake Call</h3>
+              <p>Simulate an immediate incoming call to excuse yourself safely</p>
+            </div>
+            <span class="tool-action"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="tool-card card-purple" onclick="App.navigateTo('siren')">
+            <div class="tool-icon">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div class="tool-details">
+              <h3>Loud Siren</h3>
+              <p>Trigger high-decibel deterrent alarm and strobe light</p>
+            </div>
+            <span class="tool-action"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="tool-card card-teal" onclick="App.navigateTo('recorder')">
+            <div class="tool-icon">
+              <i class="fa-solid fa-microphone-lines"></i>
+            </div>
+            <div class="tool-details">
+              <h3>Audio Evidence</h3>
+              <p>Discreetly record surroundings for security & verification</p>
+            </div>
+            <span class="tool-action"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
+          <div class="tool-card card-orange" onclick="App.navigateTo('countdown')">
+            <div class="tool-icon">
+              <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <div class="tool-details">
+              <h3>Safety Timer</h3>
+              <p>Countdown timer: automatically alerts if you don't check in</p>
+            </div>
+            <span class="tool-action"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </div>
+
+        <!-- Dashboard Location & Trusted Contacts Split Grid -->
+        <div class="dashboard-split-grid">
+          <!-- Location Snapshot Card -->
+          <div class="card glass-card location-summary-card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-location-dot text-pink"></i>
+                <h3>Current Location Snapshot</h3>
+              </div>
+              <button id="refresh-location-dash-btn" class="icon-btn-round" title="Refresh Location">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+            </div>
+            <div class="location-body">
+              <div class="coord-badge-group">
+                <div class="coord-box">
+                  <span class="coord-label">Latitude</span>
+                  <span class="coord-val" id="dash-lat">Fetching...</span>
+                </div>
+                <div class="coord-box">
+                  <span class="coord-label">Longitude</span>
+                  <span class="coord-val" id="dash-lng">Fetching...</span>
+                </div>
+              </div>
+              <p class="address-preview" id="dash-address">
+                <i class="fa-solid fa-compass"></i> Press refresh or open Live Location to lock GPS coordinates.
+              </p>
+              <div class="location-card-actions">
+                <button class="btn btn-primary btn-sm" onclick="App.navigateTo('location')">
+                  <i class="fa-solid fa-map-location-dot"></i> Open Full Map
+                </button>
+                <button class="btn btn-secondary btn-sm" id="dash-share-loc-btn">
+                  <i class="fa-solid fa-share-nodes"></i> Share Location Link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Contacts Card -->
+          <div class="card glass-card contacts-summary-card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-heart-pulse text-purple"></i>
+                <h3>Trusted Guardians</h3>
+              </div>
+              <button class="btn btn-text btn-sm" onclick="App.navigateTo('contacts')">
+                Manage <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="contacts-mini-list" id="dash-contacts-mini-list">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Safety Tip Teaser Banner -->
+        <div class="tip-banner-card">
+          <div class="tip-icon-box">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <div class="tip-content">
+            <h4>Safety Tip of the Day</h4>
+            <p id="dash-tip-text">Always share your live journey details with family or a trusted friend before entering an auto or cab after dark.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="App.navigateTo('tips')">Read More Tips</button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 2: EMERGENCY SOS (Full View)
+           ========================================== -->
+      <section id="page-sos" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-triangle-exclamation text-pink"></i> Emergency SOS Center</h1>
+            <p>Immediate distress alert dispatch for urgent crisis situations.</p>
+          </div>
+          <div class="live-gps-indicator" id="sos-gps-indicator">
+            <span class="pulsing-dot red"></span> GPS Ready
+          </div>
+        </div>
+
+        <div class="emergency-guide-banner">
+          <div class="banner-icon"><i class="fa-solid fa-circle-info"></i></div>
+          <div class="banner-text">
+            <strong>Transparent Safety Protocol:</strong>
+            Browsers cannot silently bill or send SMS in the background without user consent. SafeHer formats the exact distress text with live GPS coordinates & Google Maps link, allowing you to instantly broadcast it with 1-click via WhatsApp or SMS.
+          </div>
+        </div>
+
+        <div class="sos-action-showcase">
+          <div class="sos-big-trigger-card">
+            <h3>Press to Activate Emergency Alert</h3>
+            <p>This will trigger real-time GPS coordinate acquisition and prepare multi-channel distress messages.</p>
+            <button id="sos-trigger-page-btn" class="sos-massive-btn">
+              <i class="fa-solid fa-bell"></i>
+              <span>TRIGGER SOS</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sos-prepared-message-card card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-envelope-open-text text-purple"></i> Pre-generated Emergency Message</h3>
+            <span class="badge badge-purple">Auto-Synced</span>
+          </div>
+          <textarea id="sos-preview-text" class="form-textarea" rows="4" readonly></textarea>
+          
+          <div class="dispatch-buttons-row">
+            <button id="send-whatsapp-sos-btn" class="btn btn-whatsapp btn-lg">
+              <i class="fa-brands fa-whatsapp"></i> Broadcast via WhatsApp
+            </button>
+            <button id="send-sms-sos-btn" class="btn btn-sms btn-lg">
+              <i class="fa-solid fa-comment-sms"></i> Send via SMS
+            </button>
+            <button id="copy-sos-text-btn" class="btn btn-secondary btn-lg">
+              <i class="fa-solid fa-copy"></i> Copy Message
+            </button>
+          </div>
+        </div>
+
+        <!-- Direct Emergency Dialing Grid -->
+        <div class="section-heading mt-4">
+          <h2><i class="fa-solid fa-phone-flip text-purple"></i> One-Touch Emergency Call Directory</h2>
+          <span class="sub">Direct telephone links - connected immediately</span>
+        </div>
+        <div class="helpline-grid">
+          <a href="tel:112" class="helpline-card emergency-red">
+            <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
+            <div class="helpline-info">
+              <h3>112</h3>
+              <p>National Emergency Number</p>
+              <span class="call-action">Tap to Call &rarr;</span>
+            </div>
+          </a>
+          <a href="tel:1091" class="helpline-card emergency-pink">
+            <div class="icon-circle"><i class="fa-solid fa-shield-cat"></i></div>
+            <div class="helpline-info">
+              <h3>1091</h3>
+              <p>Women in Distress Helpline</p>
+              <span class="call-action">Tap to Call &rarr;</span>
+            </div>
+          </a>
+          <a href="tel:100" class="helpline-card emergency-navy">
+            <div class="icon-circle"><i class="fa-solid fa-handcuffs"></i></div>
+            <div class="helpline-info">
+              <h3>100</h3>
+              <p>Police Control Room</p>
+              <span class="call-action">Tap to Call &rarr;</span>
+            </div>
+          </a>
+          <a href="tel:181" class="helpline-card emergency-purple">
+            <div class="icon-circle"><i class="fa-solid fa-person-shelter"></i></div>
+            <div class="helpline-info">
+              <h3>181</h3>
+              <p>Women Helpline (Domestic Abuse)</p>
+              <span class="call-action">Tap to Call &rarr;</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 3: TRUSTED CONTACTS
+           ========================================== -->
+      <section id="page-contacts" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-users text-pink"></i> Trusted Emergency Contacts</h1>
+            <p>Save family members, roommates, and trusted guardians who will receive your SOS distress calls.</p>
+          </div>
+          <button id="add-contact-btn" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Add Contact
+          </button>
+        </div>
+
+        <!-- Contacts Grid Container -->
+        <div class="contacts-grid" id="contacts-grid-container">
+          <!-- Rendered via JavaScript -->
+        </div>
+
+        <!-- Contact Guide Card -->
+        <div class="card info-card mt-4">
+          <i class="fa-solid fa-lightbulb text-purple"></i>
+          <div>
+            <strong>Best Practice Tip:</strong>
+            We recommend saving at least 2-3 local contacts who can arrive quickly or notify local authorities immediately.
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 4: LIVE LOCATION SHARING
+           ========================================== -->
+      <section id="page-location" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-location-crosshairs text-pink"></i> Live Location Sentinel</h1>
+            <p>High-accuracy GPS tracking with interactive OpenStreetMap visualization.</p>
+          </div>
+          <div class="action-btn-group">
+            <button id="loc-refresh-btn" class="btn btn-secondary">
+              <i class="fa-solid fa-location-arrow"></i> Refresh GPS
+            </button>
+            <button id="loc-share-btn" class="btn btn-primary">
+              <i class="fa-solid fa-share-nodes"></i> Share Location
+            </button>
+          </div>
+        </div>
+
+        <!-- Location Telemetry Strip -->
+        <div class="telemetry-bar">
+          <div class="telemetry-item">
+            <span class="tele-title">LATITUDE</span>
+            <span class="tele-val" id="map-lat">--.----</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tele-title">LONGITUDE</span>
+            <span class="tele-val" id="map-lng">--.----</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tele-title">ACCURACY RADIUS</span>
+            <span class="tele-val" id="map-accuracy">Within ~20m</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tele-title">TIMESTAMP</span>
+            <span class="tele-val" id="map-timestamp">Just now</span>
+          </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-wrapper card">
+          <div id="live-leaflet-map" class="leaflet-map-container"></div>
+          <div class="map-overlay-controls">
+            <a id="open-gmaps-link" href="#" target="_blank" rel="noopener noreferrer" class="map-external-link">
+              <i class="fa-brands fa-google"></i> Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Live Share Options Row -->
+        <div class="card mt-3">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-link text-purple"></i> Quick Shareable Link</h3>
+          </div>
+          <div class="input-with-button">
+            <input type="text" id="shareable-map-url" class="form-input" readonly value="https://maps.google.com/?q=28.6139,77.2090">
+            <button id="copy-map-url-btn" class="btn btn-primary">
+              <i class="fa-solid fa-copy"></i> Copy Link
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 5: FAKE CALL SIMULATOR
+           ========================================== -->
+      <section id="page-fakecall" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-phone-slash text-pink"></i> Fake Call Simulator</h1>
+            <p>Schedule a realistic simulated incoming phone call to discreetly exit unsafe, awkward, or uncomfortable situations.</p>
+          </div>
+        </div>
+
+        <div class="fakecall-settings-grid">
+          <!-- Setup Card -->
+          <div class="card setup-call-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-sliders text-purple"></i> Configure Incoming Call</h3>
+            </div>
+
+            <div class="form-group">
+              <label for="fake-caller-name"><i class="fa-solid fa-user"></i> Caller Display Name</label>
+              <select id="fake-caller-name" class="form-input">
+                <option value="Mom">Mom (Home)</option>
+                <option value="Dad">Dad</option>
+                <option value="Inspector Sharma (Police)">Police Inspector Sharma</option>
+                <option value="Brother">Brother</option>
+                <option value="Boss / Office">Boss / Manager</option>
+                <option value="Cab Driver (Uber/Ola)">Cab Driver</option>
+                <option value="custom">-- Custom Name --</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="custom-caller-group" style="display: none;">
+              <label for="custom-caller-input">Custom Caller Name</label>
+              <input type="text" id="custom-caller-input" class="form-input" placeholder="e.g., Inspector Priya, Uncle">
+            </div>
+
+            <div class="form-group">
+              <label for="fake-caller-number"><i class="fa-solid fa-phone"></i> Simulated Phone Number / Label</label>
+              <input type="text" id="fake-caller-number" class="form-input" value="+91 98200 11091" placeholder="+91 ...">
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-clock"></i> Schedule Call Delay</label>
+              <div class="delay-pill-group">
+                <button type="button" class="delay-pill active" data-delay="0">Instant</button>
+                <button type="button" class="delay-pill" data-delay="5">5 Secs</button>
+                <button type="button" class="delay-pill" data-delay="15">15 Secs</button>
+                <button type="button" class="delay-pill" data-delay="30">30 Secs</button>
+                <button type="button" class="delay-pill" data-delay="60">1 Min</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-container">
+                <input type="checkbox" id="fake-audio-ringtone-toggle" checked>
+                <span class="checkmark"></span>
+                Play Synthesized Ringtone (Native Web Audio)
+              </label>
+            </div>
+
+            <button id="trigger-fakecall-btn" class="btn btn-primary btn-lg w-100">
+              <i class="fa-solid fa-phone-arrow-down-left"></i> Start Fake Call
+            </button>
+          </div>
+
+          <!-- Explanation / Scenario Card -->
+          <div class="card feature-info-card">
+            <h3><i class="fa-solid fa-shield-halved text-pink"></i> When to Use This Tool</h3>
+            <ul class="feature-bullets">
+              <li>
+                <div class="bullet-icon"><i class="fa-solid fa-taxi"></i></div>
+                <div>
+                  <strong>Uncomfortable Cab/Auto Rides:</strong>
+                  Answer the call and state loudly: <em>"Hey Dad, yes I'm on the highway, reaching in 5 minutes. Sending you my live location right now."</em>
+                </div>
+              </li>
+              <li>
+                <div class="bullet-icon"><i class="fa-solid fa-person-walking"></i></div>
+                <div>
+                  <strong>Suspicious Person Following:</strong>
+                  Pretend you are in direct conversation with a police officer or family member to immediately deter them.
+                </div>
+              </li>
+              <li>
+                <div class="bullet-icon"><i class="fa-solid fa-user-group"></i></div>
+                <div>
+                  <strong>Awkward or Hostile Meetings:</strong>
+                  Gives you a courteous, unquestionable excuse to step away instantly.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 6: SAFE JOURNEY (Walk With Me)
+           ========================================== -->
+      <section id="page-journey" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-route text-pink"></i> Safe Journey Guardian</h1>
+            <p>Track your trip from departure to destination. If anything goes wrong, guardians are notified.</p>
+          </div>
+        </div>
+
+        <div class="journey-dashboard-grid">
+          <!-- Journey Setup / Active Panel -->
+          <div class="card journey-panel-card">
+            <!-- Form State (When not in active journey) -->
+            <div id="journey-setup-view">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-car-side text-purple"></i> Start New Safe Journey</h3>
+              </div>
+              <div class="form-group">
+                <label for="journey-origin"><i class="fa-solid fa-circle-dot text-pink"></i> Current Origin</label>
+                <input type="text" id="journey-origin" class="form-input" placeholder="e.g. Metro Station, Office">
+              </div>
+              <div class="form-group">
+                <label for="journey-destination"><i class="fa-solid fa-location-dot text-danger"></i> Destination</label>
+                <input type="text" id="journey-destination" class="form-input" placeholder="e.g. Home, Hostel, Friend's Place">
+              </div>
+              <div class="form-group">
+                <label for="journey-mode"><i class="fa-solid fa-van-shuttle"></i> Travel Mode & Vehicle Details</label>
+                <input type="text" id="journey-mode" class="form-input" placeholder="e.g. Uber Cab (DL 1Y 4421) or Walking">
+              </div>
+              <div class="form-group">
+                <label for="journey-duration"><i class="fa-solid fa-stopwatch"></i> Estimated Duration (Minutes)</label>
+                <select id="journey-duration" class="form-input">
+                  <option value="15">15 Minutes</option>
+                  <option value="30" selected>30 Minutes</option>
+                  <option value="45">45 Minutes</option>
+                  <option value="60">1 Hour</option>
+                  <option value="90">1.5 Hours</option>
+                </select>
+              </div>
+
+              <button id="start-journey-btn" class="btn btn-primary btn-lg w-100">
+                <i class="fa-solid fa-compass"></i> Begin Safe Journey
+              </button>
+            </div>
+
+            <!-- Active Journey State -->
+            <div id="journey-active-view" style="display: none;">
+              <div class="journey-live-badge">
+                <span class="pulsing-dot green"></span> JOURNEY IN PROGRESS
+              </div>
+              <div class="journey-timer-display">
+                <span class="journey-clock" id="journey-elapsed-clock">00:00:00</span>
+                <span class="journey-time-label">Elapsed Journey Time</span>
+              </div>
+
+              <div class="journey-route-preview">
+                <div class="route-node">
+                  <i class="fa-solid fa-circle-dot text-pink"></i>
+                  <span id="active-origin-text">Origin</span>
+                </div>
+                <div class="route-line"></div>
+                <div class="route-node">
+                  <i class="fa-solid fa-location-dot text-danger"></i>
+                  <span id="active-dest-text">Destination</span>
+                </div>
+              </div>
+
+              <div class="vehicle-tag">
+                <i class="fa-solid fa-car"></i> <span id="active-vehicle-text">Uber Cab</span>
+              </div>
+
+              <div class="journey-active-buttons">
+                <button id="safe-arrival-btn" class="btn btn-success btn-lg">
+                  <i class="fa-solid fa-circle-check"></i> I'm Safe / Arrived!
+                </button>
+                <button id="share-journey-btn" class="btn btn-whatsapp">
+                  <i class="fa-brands fa-whatsapp"></i> Update Contacts
+                </button>
+                <button id="journey-panic-btn" class="btn btn-danger">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Emergency Panic
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Journey Tips & Safety Protocol -->
+          <div class="card journey-info-card">
+            <h3><i class="fa-solid fa-shield-heart text-purple"></i> Smart Journey Checklist</h3>
+            <div class="safety-checklist">
+              <label class="check-item">
+                <input type="checkbox" checked>
+                <span>Verify cab registration plate before opening door</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" checked>
+                <span>Verify child lock is disengaged from inside handle</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox">
+                <span>Call contact and speak vehicle number out loud</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox">
+                <span>Keep SafeHer open with SOS ready in quick drawer</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 7: EMERGENCY AUDIO RECORDER
+           ========================================== -->
+      <section id="page-recorder" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-microphone-lines text-pink"></i> Emergency Audio Evidence</h1>
+            <p>Discreetly record ambient audio for security records and digital evidence using the browser MediaRecorder API.</p>
+          </div>
+        </div>
+
+        <div class="recorder-layout-grid">
+          <!-- Main Recording Deck -->
+          <div class="card recording-deck-card">
+            <div class="audio-visualizer-container">
+              <div class="wave-ring" id="recorder-wave-ring"></div>
+              <div class="mic-center-icon" id="mic-center-indicator">
+                <i class="fa-solid fa-microphone"></i>
+              </div>
+            </div>
+
+            <div class="recording-timer" id="recording-duration-timer">00:00</div>
+            <p class="recorder-status-caption" id="recorder-status-text">Ready to record with microphone permission</p>
+
+            <div class="recorder-controls-row">
+              <button id="start-recording-btn" class="btn btn-danger btn-lg">
+                <i class="fa-solid fa-circle-dot"></i> Start Recording
+              </button>
+              <button id="stop-recording-btn" class="btn btn-secondary btn-lg" style="display: none;">
+                <i class="fa-solid fa-stop"></i> Stop & Save Audio
+              </button>
+            </div>
+
+            <!-- Audio Playback Deck -->
+            <div id="audio-playback-deck" class="playback-container" style="display: none;">
+              <audio id="audio-player-element" controls class="w-100 mt-3"></audio>
+              <div class="audio-save-actions mt-3">
+                <button id="download-audio-btn" class="btn btn-primary">
+                  <i class="fa-solid fa-download"></i> Download Evidence Audio (.webm)
+                </button>
+                <button id="discard-audio-btn" class="btn btn-ghost">
+                  <i class="fa-solid fa-trash-can"></i> Discard
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audio Legal & Safety Advisory -->
+          <div class="card advisory-card">
+            <h3><i class="fa-solid fa-scale-balanced text-purple"></i> Legal Evidence Value</h3>
+            <p>Under Section 65B of the Indian Evidence Act (and international electronic evidence frameworks), ambient audio recordings with verifiable timestamps can serve as corroborating evidence in legal proceedings.</p>
+            <div class="permission-note mt-3">
+              <i class="fa-solid fa-lock text-success"></i>
+              <span>All recordings stay 100% private in your local browser sandbox unless you explicitly choose to download or export them.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 8: NEARBY EMERGENCY SERVICES
+           ========================================== -->
+      <section id="page-nearby" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-hospital text-pink"></i> Nearby Emergency Services</h1>
+            <p>Locate nearby police stations, 24/7 hospitals, women help desks, and pharmacies.</p>
+          </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="service-filter-bar">
+          <button class="filter-btn active" data-category="all">All Services</button>
+          <button class="filter-btn" data-category="police"><i class="fa-solid fa-building-shield"></i> Police Stations</button>
+          <button class="filter-btn" data-category="hospital"><i class="fa-solid fa-hospital"></i> Hospitals & Trauma</button>
+          <button class="filter-btn" data-category="women"><i class="fa-solid fa-shield-cat"></i> Women Help Desks</button>
+          <button class="filter-btn" data-category="pharmacy"><i class="fa-solid fa-prescription-bottle-medical"></i> 24/7 Pharmacies</button>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid" id="services-grid-container">
+          <!-- Rendered via JavaScript with real OpenStreetMap / Google Maps coordinate queries -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 9: SHAKE TO ALERT (Innovative)
+           ========================================== -->
+      <section id="page-shake" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-hand-fist text-pink"></i> Shake to Alert System</h1>
+            <p>Emergency acceleration trigger that detects physical shaking gestures on mobile phones.</p>
+          </div>
+        </div>
+
+        <div class="shake-feature-grid">
+          <!-- Live Sensor Card -->
+          <div class="card shake-monitor-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-microchip text-purple"></i> Motion Sensor Status</h3>
+              <span id="motion-sensor-badge" class="badge badge-warning">Inactive</span>
+            </div>
+
+            <div class="sensor-meter-box">
+              <div class="sensor-axis">
+                <span class="axis-label">X-Axis (Tilt)</span>
+                <div class="meter-bar"><div class="meter-fill" id="meter-x" style="width: 50%;"></div></div>
+                <span class="meter-val" id="val-x">0.0</span>
+              </div>
+              <div class="sensor-axis">
+                <span class="axis-label">Y-Axis (Swing)</span>
+                <div class="meter-bar"><div class="meter-fill" id="meter-y" style="width: 50%;"></div></div>
+                <span class="meter-val" id="val-y">0.0</span>
+              </div>
+              <div class="sensor-axis">
+                <span class="axis-label">Z-Axis (Shake)</span>
+                <div class="meter-bar"><div class="meter-fill" id="meter-z" style="width: 50%;"></div></div>
+                <span class="meter-val" id="val-z">0.0</span>
+              </div>
+            </div>
+
+            <div class="form-group mt-3">
+              <label for="shake-sensitivity">Sensitivity Threshold</label>
+              <select id="shake-sensitivity" class="form-input">
+                <option value="12">High Sensitivity (Light Shake)</option>
+                <option value="20" selected>Medium Sensitivity (Firm Shake)</option>
+                <option value="30">Low Sensitivity (Vigorous Shake)</option>
+              </select>
+            </div>
+
+            <div class="shake-actions">
+              <button id="enable-shake-btn" class="btn btn-primary btn-lg w-100">
+                <i class="fa-solid fa-power-off"></i> Enable Shake Detection
+              </button>
+              <button id="test-shake-btn" class="btn btn-secondary mt-2 w-100">
+                <i class="fa-solid fa-vial"></i> Test Shake Alert (Simulate)
+              </button>
+            </div>
+          </div>
+
+          <!-- Explanation Card -->
+          <div class="card shake-info-card">
+            <h3><i class="fa-solid fa-circle-question text-purple"></i> How Does Shake Detection Work?</h3>
+            <p>Using the HTML5 <strong>DeviceMotionEvent API</strong>, SafeHer continuously measures total acceleration deltas: \(\sqrt{a_x^2 + a_y^2 + a_z^2}\).</p>
+            <div class="feature-bullets mt-3">
+              <div class="bullet-item">
+                <i class="fa-solid fa-mobile-screen-button text-pink"></i>
+                <div>
+                  <strong>Hands-Free Activation:</strong> If pinned down or unable to unlock phone screen, shaking the phone triggers emergency mode.
+                </div>
+              </div>
+              <div class="bullet-item">
+                <i class="fa-solid fa-shield-halved text-purple"></i>
+                <div>
+                  <strong>Safety Threshold:</strong> Tuned to prevent false alarms during normal running or walking.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 10: EMERGENCY COUNTDOWN (Innovative)
+           ========================================== -->
+      <section id="page-countdown" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-stopwatch-20 text-pink"></i> Emergency Countdown Watch</h1>
+            <p>Dead man's safety switch. If you do not enter your safety PIN before the timer ends, SOS triggers automatically.</p>
+          </div>
+        </div>
+
+        <div class="countdown-grid">
+          <!-- Timer Display Card -->
+          <div class="card countdown-clock-card">
+            <!-- Setting Mode -->
+            <div id="countdown-setup-state">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-clock text-purple"></i> Configure Safety Window</h3>
+              </div>
+              <p>Set a duration for an activity (e.g. walking through a dark street, reaching your apartment elevator, or taking a cab).</p>
+              
+              <div class="duration-selector-row">
+                <button type="button" class="duration-btn" data-minutes="1">1 Min (Test)</button>
+                <button type="button" class="duration-btn active" data-minutes="5">5 Mins</button>
+                <button type="button" class="duration-btn" data-minutes="15">15 Mins</button>
+                <button type="button" class="duration-btn" data-minutes="30">30 Mins</button>
+              </div>
+
+              <div class="form-group mt-3">
+                <label for="safety-pin-input"><i class="fa-solid fa-key"></i> Safety Cancellation PIN (Default: 1234)</label>
+                <input type="password" id="safety-pin-input" class="form-input" value="1234" maxlength="6">
+              </div>
+
+              <button id="arm-countdown-btn" class="btn btn-danger btn-lg w-100 mt-2">
+                <i class="fa-solid fa-shield-virus"></i> Arm Safety Timer
+              </button>
+            </div>
+
+            <!-- Active Countdown Mode -->
+            <div id="countdown-active-state" style="display: none;">
+              <div class="circular-progress-wrap">
+                <svg class="progress-ring" width="220" height="220">
+                  <circle class="progress-ring-bg" stroke="#f1f5f9" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
+                  <circle id="countdown-svg-circle" class="progress-ring-indicator" stroke="#f43f5e" stroke-width="12" stroke-linecap="round" fill="transparent" r="90" cx="110" cy="110"/>
+                </svg>
+                <div class="countdown-digits-center">
+                  <span id="countdown-remaining-digits">05:00</span>
+                  <span class="countdown-label">Time Remaining</span>
+                </div>
+              </div>
+
+              <div class="disarm-box card mt-3">
+                <label for="disarm-pin-input">Enter PIN to Confirm You Are Safe:</label>
+                <div class="input-with-button">
+                  <input type="password" id="disarm-pin-input" class="form-input" placeholder="Enter PIN (1234)">
+                  <button id="disarm-timer-btn" class="btn btn-success">
+                    <i class="fa-solid fa-lock-open"></i> I Am Safe
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Advisory -->
+          <div class="card countdown-guide-card">
+            <h3><i class="fa-solid fa-bell-slash text-purple"></i> How It Protects You</h3>
+            <p>If you fail to disarm the timer within the designated window:</p>
+            <ul class="feature-bullets">
+              <li>High-decibel audible alarm sounds to warn you 10 seconds before expiry.</li>
+              <li>When time expires, the application automatically triggers the full Emergency SOS dispatch screen with your coordinates.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 11: SAFETY TIPS & LEGAL RIGHTS
+           ========================================== -->
+      <section id="page-tips" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-book-open-reader text-pink"></i> Safety Guidelines & Legal Rights</h1>
+            <p>Actionable precautions, practical street-smart advice, and legal awareness for women.</p>
+          </div>
+          <div class="search-tip-box">
+            <input type="text" id="tips-search-input" class="form-input" placeholder="Search safety tips...">
+          </div>
+        </div>
+
+        <div class="tips-categories-bar">
+          <button class="tip-cat-btn active" data-tip-cat="all">All Advice</button>
+          <button class="tip-cat-btn" data-tip-cat="personal">Personal Safety</button>
+          <button class="tip-cat-btn" data-tip-cat="travel">Commute & Travel</button>
+          <button class="tip-cat-btn" data-tip-cat="online">Online & Cyber</button>
+          <button class="tip-cat-btn" data-tip-cat="legal">Legal Rights & Laws</button>
+        </div>
+
+        <div class="tips-grid" id="tips-cards-container">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           PAGE 12: USER PROFILE & SETTINGS
+           ========================================== -->
+      <section id="page-profile" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1><i class="fa-solid fa-circle-user text-pink"></i> User Profile & Safety Dossier</h1>
+            <p>Personal medical details, emergency notes, and account settings saved safely in localStorage.</p>
+          </div>
+        </div>
+
+        <div class="profile-layout-grid">
+          <div class="card profile-card">
+            <div class="profile-header-banner">
+              <div class="profile-avatar-large" id="profile-avatar-display">DC</div>
+              <div class="profile-title">
+                <h2 id="profile-name-display">Diya C.</h2>
+                <span class="user-role-badge">Protected Member</span>
+              </div>
+            </div>
+
+            <form id="profile-edit-form" class="profile-form mt-4">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="prof-fullname">Full Name</label>
+                  <input type="text" id="prof-fullname" class="form-input" value="Diya C.">
+                </div>
+                <div class="form-group col-6">
+                  <label for="prof-phone">Phone Number</label>
+                  <input type="tel" id="prof-phone" class="form-input" value="+91 98765 43210">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="prof-email">Email Address</label>
+                  <input type="email" id="prof-email" class="form-input" value="diya@safeher.demo">
+                </div>
+                <div class="form-group col-6">
+                  <label for="prof-blood">Blood Group</label>
+                  <select id="prof-blood" class="form-input">
+                    <option value="B+">B Positive (B+)</option>
+                    <option value="O+" selected>O Positive (O+)</option>
+                    <option value="A+">A Positive (A+)</option>
+                    <option value="AB+">AB Positive (AB+)</option>
+                    <option value="O-">O Negative (O-)</option>
+                    <option value="A-">A Negative (A-)</option>
+                    <option value="B-">B Negative (B-)</option>
+                    <option value="AB-">AB Negative (AB-)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="prof-address">Home Address / Primary Safe Haven</label>
+                <input type="text" id="prof-address" class="form-input" value="Flat 402, Lotus Apartments, MG Road, New Delhi">
+              </div>
+
+              <div class="form-group">
+                <label for="prof-medical">Critical Medical Info / Allergies</label>
+                <textarea id="prof-medical" class="form-textarea" rows="2" placeholder="e.g. Asthmatic, Penicillin allergy"></textarea>
+              </div>
+
+              <div class="form-actions mt-3">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Profile Details
+                </button>
+                <button type="button" id="reset-demo-data-btn" class="btn btn-ghost">
+                  <i class="fa-solid fa-rotate-left"></i> Restore Default Demo Data
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Application Settings & Credits Card -->
+          <div class="card app-info-card">
+            <h3><i class="fa-solid fa-circle-info text-purple"></i> Project SafeHer Dossier</h3>
+            <div class="dossier-item">
+              <span class="d-label">Project Title:</span>
+              <span class="d-val">SafeHer – Your Safety, Our Priority</span>
+            </div>
+            <div class="dossier-item">
+              <span class="d-label">Curriculum:</span>
+              <span class="d-val">B.Tech Computer Science & Engineering</span>
+            </div>
+            <div class="dossier-item">
+              <span class="d-label">Architecture:</span>
+              <span class="d-val">HTML5 &bull; CSS3 &bull; Pure Vanilla JavaScript</span>
+            </div>
+            <div class="dossier-item">
+              <span class="d-label">Local Storage:</span>
+              <span class="d-val text-success"><i class="fa-solid fa-database"></i> Active & Persistent</span>
+            </div>
+            <div class="dossier-item">
+              <span class="d-label">Security Protocol:</span>
+              <span class="d-val">Zero-tracking, Client-side Sandboxed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <a href="#dashboard" class="b-nav-link active" data-page="dashboard">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+      <a href="#sos" class="b-nav-link b-nav-sos" data-page="sos">
+        <div class="b-sos-circle">
+          <span>SOS</span>
+        </div>
+      </a>
+      <a href="#contacts" class="b-nav-link" data-page="contacts">
+        <i class="fa-solid fa-users"></i>
+        <span>Contacts</span>
+      </a>
+      <a href="#location" class="b-nav-link" data-page="location">
+        <i class="fa-solid fa-location-crosshairs"></i>
+        <span>Live GPS</span>
+      </a>
+      <a href="#fakecall" class="b-nav-link" data-page="fakecall">
+        <i class="fa-solid fa-phone-slash"></i>
+        <span>Fake Call</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- ==========================================
+       MODALS & FULLSCREEN OVERLAYS
+       ========================================== -->
+
+  <!-- 1. SOS Instant Trigger Confirmation / Abort Overlay -->
+  <div id="sos-confirm-modal" class="fullscreen-modal-overlay">
+    <div class="sos-abort-box">
+      <div class="sos-countdown-ring">
+        <span id="sos-abort-counter">3</span>
+      </div>
+      <h2>EMERGENCY ACTIVATION</h2>
+      <p>Acquiring high-accuracy GPS and compiling distress message to your trusted contacts...</p>
+      <div class="abort-actions">
+        <button id="cancel-sos-abort-btn" class="btn btn-abort btn-lg">
+          <i class="fa-solid fa-xmark"></i> CANCEL SOS (I am Safe)
+        </button>
+        <button id="instant-sos-dispatch-btn" class="btn btn-danger btn-lg">
+          <i class="fa-solid fa-forward-fast"></i> DISPATCH NOW
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Fake Incoming Call Fullscreen Screen (iOS / Android Realistic UI) -->
+  <div id="fake-call-screen" class="fake-call-fullscreen">
+    <div class="call-screen-content">
+      <div class="caller-top-info">
+        <div class="caller-avatar-circle">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <h2 id="incoming-caller-title">Mom (Home)</h2>
+        <span class="call-subtitle" id="incoming-call-subtitle">+91 98200 11091</span>
+        <span class="call-state" id="incoming-call-state-text">Incoming Voice Call...</span>
+      </div>
+
+      <!-- Action Buttons Row (Before Answer) -->
+      <div class="call-buttons-row" id="call-incoming-buttons">
+        <button id="decline-call-btn" class="call-circle-btn decline-btn" title="Decline Call">
+          <i class="fa-solid fa-phone-slash"></i>
+          <span>Decline</span>
+        </button>
+        <button id="answer-call-btn" class="call-circle-btn answer-btn pulse-glow" title="Answer Call">
+          <i class="fa-solid fa-phone"></i>
+          <span>Accept</span>
+        </button>
+      </div>
+
+      <!-- In-Call Active State Deck (After Answer) -->
+      <div class="in-call-deck" id="in-call-active-deck" style="display: none;">
+        <div class="in-call-timer" id="in-call-timer-text">00:01</div>
+        <div class="in-call-grid-controls">
+          <button class="in-call-tool-btn"><i class="fa-solid fa-microphone-slash"></i> Mute</button>
+          <button class="in-call-tool-btn"><i class="fa-solid fa-table-cells"></i> Keypad</button>
+          <button class="in-call-tool-btn"><i class="fa-solid fa-volume-high"></i> Speaker</button>
+        </div>
+        <button id="hangup-call-btn" class="call-circle-btn decline-btn mt-4">
+          <i class="fa-solid fa-phone-slash"></i>
+          <span>End Call</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Loud Siren / Deterrent Strobe Overlay -->
+  <div id="siren-modal" class="siren-overlay">
+    <div class="siren-card">
+      <div class="siren-flasher">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <h2>DETERRENT SIREN ACTIVE</h2>
+      <p>High-decibel dual-frequency audio siren and visual screen strobe are activated to deter attackers.</p>
+      <button id="stop-siren-btn" class="btn btn-secondary btn-lg">
+        <i class="fa-solid fa-stop"></i> STOP SIREN ALARM
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. Add / Edit Contact Modal -->
+  <div id="contact-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="contact-modal-title">Add Emergency Contact</h3>
+        <button id="close-contact-modal-btn" class="icon-btn-ghost"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="contact-form" class="modal-form">
+        <input type="hidden" id="contact-edit-id" value="">
+        <div class="form-group">
+          <label for="contact-name">Contact Full Name *</label>
+          <input type="text" id="contact-name" class="form-input" required placeholder="e.g. Mom, Rahul (Brother)">
+        </div>
+        <div class="form-group">
+          <label for="contact-phone">Phone Number (with Country Code) *</label>
+          <input type="tel" id="contact-phone" class="form-input" required placeholder="+91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label for="contact-relation">Relationship</label>
+          <select id="contact-relation" class="form-input">
+            <option value="Parent / Mother">Parent / Mother</option>
+            <option value="Parent / Father">Parent / Father</option>
+            <option value="Sibling">Sibling</option>
+            <option value="Best Friend">Best Friend</option>
+            <option value="Roommate">Roommate</option>
+            <option value="Guardian">Guardian</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-container">
+            <input type="checkbox" id="contact-whatsapp" checked>
+            <span class="checkmark"></span>
+            Has WhatsApp enabled on this number
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancel-contact-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Guardian</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. User Auth / Login / Register Modal -->
+  <div id="auth-modal" class="modal-overlay">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <div class="brand-auth-header">
+          <i class="fa-solid fa-shield-heart text-pink"></i>
+          <h3>SafeHer Account</h3>
+        </div>
+        <button id="close-auth-modal-btn" class="icon-btn-ghost"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Auth Tabs: Login vs Register -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-login-btn">Log In</button>
+        <button class="auth-tab-btn" id="tab-register-btn">Register New Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form-content">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-input" required value="diya@safeher.demo">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-input" required value="safeher123">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-100">Sign In to SafeHer</button>
+        <div class="demo-auth-hint">
+          <button type="button" id="fill-demo-login-btn" class="btn btn-ghost btn-sm">
+            <i class="fa-solid fa-key"></i> Quick Fill Presentation Demo Credentials
+          </button>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form-content" style="display: none;">
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" class="form-input" required placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">Phone Number</label>
+          <input type="tel" id="reg-phone" class="form-input" required placeholder="+91 ...">
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" class="form-input" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Create Password</label>
+          <input type="password" id="reg-password" class="form-input" required placeholder="Minimum 6 characters">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-100">Complete Registration</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. Discreet / Stealth Mode Overlay (Calculator Disguise) -->
+  <div id="stealth-calculator-overlay" class="stealth-overlay" style="display: none;">
+    <div class="stealth-container">
+      <div class="stealth-top-bar">
+        <span>Scientific Calc 3.1</span>
+        <button id="exit-stealth-btn" class="stealth-exit-btn" title="Exit to SafeHer">
+          <i class="fa-solid fa-power-off"></i> Exit
+        </button>
+      </div>
+      <div class="calc-screen" id="calc-display">0</div>
+      <div class="calc-keypad">
+        <button class="calc-key op">C</button>
+        <button class="calc-key op">±</button>
+        <button class="calc-key op">%</button>
+        <button class="calc-key op">÷</button>
+        <button class="calc-key num">7</button>
+        <button class="calc-key num">8</button>
+        <button class="calc-key num">9</button>
+        <button class="calc-key op">×</button>
+        <button class="calc-key num">4</button>
+        <button class="calc-key num">5</button>
+        <button class="calc-key num">6</button>
+        <button class="calc-key op">-</button>
+        <button class="calc-key num">1</button>
+        <button class="calc-key num">2</button>
+        <button class="calc-key num">3</button>
+        <button class="calc-key op">+</button>
+        <button class="calc-key num zero">0</button>
+        <button class="calc-key num">.</button>
+        <button class="calc-key equals">=</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Leaflet JS for OpenStreetMap -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Application Logic -->
+  <script src="script.js"></script>
+</body>
+</html>

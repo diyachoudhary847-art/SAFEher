@@ -1,4 +1,5 @@
- /**
+start code from here
+/**
  * SafeHer – Women Safety & Emergency Assistance Web Application
  * Complete Vanilla JavaScript Application Logic
  * Architecture: Modular Service Pattern

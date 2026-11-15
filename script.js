@@ -1,4 +1,4 @@
-start
+
 /**
  * SafeHer – Women Safety & Emergency Assistance Web Application
  * Complete Vanilla JavaScript Application Logic
